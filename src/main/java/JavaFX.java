@@ -32,7 +32,7 @@ public class JavaFX extends Application {
 			throw new RuntimeException("Forecast did not load");
 		}
 
-        Period today = forecast.get(0); // This grabs the first forecast item and stores it in a variable called today.
+        /*Period today = forecast.get(0); // This grabs the first forecast item and stores it in a variable called today.
         Label titleLabel = new Label("Today's Weather"); // shows the scene title
         String forecastText = today.shortForecast.toLowerCase();
         String windText = today.windSpeed.toLowerCase();
@@ -107,7 +107,131 @@ public class JavaFX extends Application {
         forecastButton.setStyle("-fx-font-size: 16px;");
 
         // I created the first scene from my VBox layout, attached it to the stage, and then displayed it.
-        Scene scene1 = new Scene(root, 700, 700);
+        Scene scene1 = new Scene(root, 700, 700);*/
+
+        Period today = forecast.get(0);
+
+        // 1. TOP LEFT: Big Icon, Big Temp, F/C Toggle, and Details
+        Label bigIcon = new Label();
+        String forecastText = today.shortForecast.toLowerCase();
+        if (forecastText.contains("sun") || forecastText.contains("clear")) {
+            bigIcon.setText("☀");
+            bigIcon.setStyle("-fx-text-fill: orange; -fx-font-size: 70px;");
+        } else if (forecastText.contains("rain") || forecastText.contains("shower")) {
+            bigIcon.setText("☂");
+            bigIcon.setStyle("-fx-text-fill: #4285F4; -fx-font-size: 70px;"); // Google Blue
+        } else {
+            bigIcon.setText("☁");
+            bigIcon.setStyle("-fx-text-fill: gray; -fx-font-size: 70px;");
+        }
+
+        // Temperatures for math
+        int fTemp = today.temperature;
+        int cTemp = (int) Math.round((fTemp - 32) * 5.0 / 9.0);
+
+        Label bigTemp = new Label(String.valueOf(fTemp));
+        bigTemp.setStyle("-fx-font-size: 64px; -fx-font-family: 'Arial';");
+
+        Label fToggle = new Label("°F");
+        Label separator = new Label(" | ");
+        Label cToggle = new Label("°C");
+
+        // Default styling for toggles
+        String activeToggleStyle = "-fx-font-size: 18px; -fx-text-fill: black; -fx-font-weight: bold; -fx-cursor: hand;";
+        String inactiveToggleStyle = "-fx-font-size: 18px; -fx-text-fill: gray; -fx-cursor: hand;";
+        fToggle.setStyle(activeToggleStyle);
+        cToggle.setStyle(inactiveToggleStyle);
+        separator.setStyle("-fx-font-size: 18px; -fx-text-fill: gray;");
+
+        javafx.scene.layout.HBox toggleBox = new javafx.scene.layout.HBox(fToggle, separator, cToggle);
+        toggleBox.setAlignment(Pos.TOP_LEFT);
+        toggleBox.setPadding(new Insets(15, 0, 0, 5));
+
+        // Precipitation and Wind details
+        int rainChance = (today.probabilityOfPrecipitation != null)
+                ? today.probabilityOfPrecipitation.value : 0;
+
+        Label precipDetail = new Label("Precipitation: " + rainChance + "%");
+        Label windDetail = new Label("Wind: " + today.windSpeed);
+        precipDetail.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
+        windDetail.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
+        VBox detailsBox = new VBox(2, precipDetail, windDetail);
+        detailsBox.setPadding(new Insets(15, 0, 0, 20));
+
+        javafx.scene.layout.HBox topSection = new javafx.scene.layout.HBox(10, bigIcon, bigTemp, toggleBox, detailsBox);
+        topSection.setAlignment(Pos.CENTER_LEFT);
+
+        // 2. TABS: Temperature, Precipitation, Wind
+        Label tempTab = new Label("Temperature");
+        tempTab.setStyle("-fx-font-size: 14px; -fx-padding: 0 0 5 0; -fx-border-color: transparent transparent #FBBC04 transparent; -fx-border-width: 0 0 3 0;"); // Yellow bottom border
+        Label precipTab = new Label("Precipitation");
+        precipTab.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
+        Label windTab = new Label("Wind");
+        windTab.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
+
+        javafx.scene.layout.HBox tabs = new javafx.scene.layout.HBox(30, tempTab, precipTab, windTab);
+        tabs.setPadding(new Insets(20, 0, 10, 0));
+
+        // A subtle gray line under the tabs to separate sections
+        javafx.scene.control.Separator line = new javafx.scene.control.Separator();
+
+        // We grab the next full day (Day and Night) to show High/Low
+        Period nextDay = forecast.get(1);
+        Period nextNight = forecast.get(2);
+
+        VBox dayCard = new VBox(5);
+        dayCard.setAlignment(Pos.CENTER);
+        dayCard.setStyle("-fx-background-color: #f1f3f4; -fx-background-radius: 15; -fx-padding: 15;"); // Rounded gray box
+        dayCard.setMaxWidth(80);
+
+        Label dayName = new Label(nextDay.name.substring(0, Math.min(nextDay.name.length(), 3))); // E.g., "Mon"
+        dayName.setStyle("-fx-font-size: 16px;");
+        Label dayIcon = new Label(bigIcon.getText()); // Reuse the icon logic for simplicity
+        dayIcon.setStyle("-fx-font-size: 30px; -fx-text-fill: " + (bigIcon.getText().equals("☀") ? "orange" : "gray") + ";");
+
+        Label highLow = new Label(nextDay.temperature + "°  " + nextNight.temperature + "°");
+        highLow.setStyle("-fx-font-size: 14px; -fx-text-fill: gray;");
+
+        dayCard.getChildren().addAll(dayName, dayIcon, highLow);
+
+        // Put the day card inside an HBox so it sits on the left
+        javafx.scene.layout.HBox bottomSection = new javafx.scene.layout.HBox(dayCard);
+        bottomSection.setPadding(new Insets(20, 0, 0, 0));
+
+        // Navigation Button
+        Button forecastButton = new Button("View Full 3-Day Forecast");
+        forecastButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue; -fx-cursor: hand;"); // Google link style
+        javafx.scene.layout.HBox buttonContainer = new javafx.scene.layout.HBox(forecastButton);
+        buttonContainer.setAlignment(Pos.BOTTOM_CENTER);
+        buttonContainer.setPadding(new Insets(50, 0, 0, 0));
+
+        // Using an array so we can change the boolean inside the lambda
+        final boolean[] isFahrenheit = {true};
+
+        cToggle.setOnMouseClicked(e -> {
+            if (isFahrenheit[0]) {
+                bigTemp.setText(String.valueOf(cTemp));
+                cToggle.setStyle(activeToggleStyle);
+                fToggle.setStyle(inactiveToggleStyle);
+                isFahrenheit[0] = false;
+            }
+        });
+
+        fToggle.setOnMouseClicked(e -> {
+            if (!isFahrenheit[0]) {
+                bigTemp.setText(String.valueOf(fTemp));
+                fToggle.setStyle(activeToggleStyle);
+                cToggle.setStyle(inactiveToggleStyle);
+                isFahrenheit[0] = true;
+            }
+        });
+
+        // Assemble the final root
+        VBox root1 = new VBox(topSection, tabs, line, bottomSection, buttonContainer);
+        root1.setPadding(new Insets(40));
+        root1.setStyle("-fx-background-color: white; -fx-font-family: 'Arial';");
+
+        Scene scene1 = new Scene(root1, 700, 700);
 
         // Scene 2 Implementation starts
         VBox root2 = new VBox();
