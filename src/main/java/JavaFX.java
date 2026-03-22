@@ -25,7 +25,7 @@ public class JavaFX extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Chicago Weather App");
-        // “I call the starter API to get weather data. If it fails, I stop the app with an error so I know something went wrong.”
+        // “I call the starter API to get weather data. If it fails, I stop the app with an error, so I know something went wrong.”
 		ArrayList<Period> forecast = WeatherAPI.getForecast("LOT",77,70);
 		if (forecast == null){
 			throw new RuntimeException("Forecast did not load");
@@ -76,6 +76,47 @@ public class JavaFX extends Application {
 
         // “I created the first scene from my VBox layout, attached it to the stage, and then displayed it.”
         Scene scene1 = new Scene(root, 700, 700);
+
+        VBox root2 = new VBox();
+        root2.setSpacing(15);
+        root2.setAlignment(Pos.CENTER);
+        root2.setPadding(new Insets(20));
+        root2.setStyle("-fx-background-color: #f0e68c;");
+
+        Label forecastTitle = new Label("3-Day Forecast");
+        forecastTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        // Graphical component for Scene 2
+        Label calendarIcon = new Label("📅");
+        calendarIcon.setStyle("-fx-font-size: 50px;");
+
+        root2.getChildren().addAll(forecastTitle, calendarIcon);
+
+        // Loop to get the next 6 periods (Day & Night for 3 days)
+        // We start at index 1 because index 0 is "Today"
+        for (int i = 1; i <= 6 && i < forecast.size(); i++) {
+            Period p = forecast.get(i);
+
+            // Requirement: day/night temp, wind speed, wind direction
+            String details = String.format("%s: %s°F | Wind: %s %s",
+                    p.name, p.temperature, p.windSpeed, p.windDirection);
+
+            Label periodLabel = new Label(details);
+            periodLabel.setStyle("-fx-font-size: 16px; -fx-background-color: white; " +
+                    "-fx-padding: 5px; -fx-border-color: gray;");
+            root2.getChildren().add(periodLabel);
+        }
+
+        Button backButton = new Button("Back to Today");
+        backButton.setStyle("-fx-font-size: 16px;");
+
+        // Add some spacing before the back button
+        VBox.setMargin(backButton, new Insets(20, 0, 0, 0));
+        root2.getChildren().add(backButton);
+
+        Scene scene2 = new Scene(root2, 700, 700);
+        forecastButton.setOnAction(e -> primaryStage.setScene(scene2));
+        backButton.setOnAction(e -> primaryStage.setScene(scene1));
         primaryStage.setScene(scene1);
         primaryStage.show();
 	}
@@ -84,5 +125,3 @@ public class JavaFX extends Application {
 /*Comments: “I used a VBox to vertically arrange UI elements. I used labels for displaying weather data and a button
 for navigation. I added a dynamic icon based on the forecast text using conditional logic.”
 */
-
-/*Hello shlok here*/
