@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import weather.Period;
 import weather.WeatherAPI;
@@ -34,6 +35,7 @@ public class JavaFX extends Application {
         Period today = forecast.get(0); // This grabs the first forecast item and stores it in a variable called today.
         Label titleLabel = new Label("Today's Weather"); // shows the scene title
         String forecastText = today.shortForecast.toLowerCase();
+        String windText = today.windSpeed.toLowerCase();
 
         Label icon;
         if (forecastText.contains("sun") || forecastText.contains("clear")) {
@@ -51,15 +53,45 @@ public class JavaFX extends Application {
         } else {
             icon = new Label("🌤");
         }
+        icon.setStyle("-fx-font-size: 150px;");
+
+        Label clothingIcon = new Label();
+        if (forecastText.contains("rain") || forecastText.contains("shower") || forecastText.contains("storm")) {
+            clothingIcon.setText("🧥"); // Raincoat
+        } else if (forecastText.contains("snow") || today.temperature < 40) {
+            clothingIcon.setText("🧣"); // Scarf/Winter wear for snow
+        } else if (forecastText.contains("wind") || windText.contains("gust") || windText.contains("20") || windText.contains("30")) {
+            clothingIcon.setText("🧢"); // Cap for windy days
+        } else if ((forecastText.contains("sun") || forecastText.contains("clear")) && today.temperature >= 70) {
+            clothingIcon.setText("👕"); // T-shirt for sunny and hot
+        } else if (today.temperature > 50 && today.temperature < 70) {
+            clothingIcon.setText("👖"); // Standard pants/casual for mild weather
+        } else {
+            clothingIcon.setText("🧥"); // Default to a light jacket
+        }
+        clothingIcon.setStyle("-fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Times New Roman'; -fx-font-size: 30px;");
+
+        int todayRainChance = 0;
+        if (today.probabilityOfPrecipitation != null) {
+            todayRainChance = today.probabilityOfPrecipitation.value;
+        }
+
+        Label rainLabel = new Label("Chance of Rain: " + todayRainChance + "%");
+        rainLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: darkblue; -fx-font-weight: bold;");
         //Label titleLabel = new Label("Today's Weather"); // shows the scene title
         //Label icon = new Label("☀️"); // new icon
+
+        javafx.scene.layout.HBox iconBox = new javafx.scene.layout.HBox(30); // 30px spacing between icons
+        iconBox.setAlignment(Pos.CENTER);
+        iconBox.getChildren().addAll(icon, clothingIcon);
+
         Label tempLabel = new Label("Temperature: " + today.temperature + "°F"); // shows the temperature
         Label forecastLabel = new Label("Forecast: " + today.shortForecast); // shows the short forecast
         Button forecastButton = new Button("View 3-Day Forecast"); // makes a button the user can click later
 
         // “I used a VBox because I wanted my title, labels, and button stacked vertically in a simple layout.”
         VBox root = new VBox();
-        root.getChildren().addAll(titleLabel,icon, tempLabel,forecastLabel,forecastButton);
+        root.getChildren().addAll(titleLabel,iconBox, tempLabel, rainLabel, forecastLabel,forecastButton);
 
         root.setSpacing(20); // adds 20 pixels between each item
         root.setAlignment(Pos.CENTER); // centers all items
