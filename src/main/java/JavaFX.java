@@ -55,7 +55,7 @@ public class JavaFX extends Application {
         }
         icon.setStyle("-fx-font-size: 150px;");
 
-        Label clothingIcon = new Label();
+        Label clothingIcon = new Label(); // Label for the icon to suggest clothing.
         if (forecastText.contains("rain") || forecastText.contains("shower") || forecastText.contains("storm")) {
             clothingIcon.setText("🧥"); // Raincoat
         } else if (forecastText.contains("snow") || today.temperature < 40) {
@@ -67,7 +67,7 @@ public class JavaFX extends Application {
         } else if (today.temperature > 50 && today.temperature < 70) {
             clothingIcon.setText("👖"); // Standard pants/casual for mild weather
         } else {
-            clothingIcon.setText("🧥"); // Default to a light jacket
+            clothingIcon.setText("🧥"); // Default
         }
         clothingIcon.setStyle("-fx-font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Times New Roman'; -fx-font-size: 30px;");
 
@@ -99,42 +99,42 @@ public class JavaFX extends Application {
         root.setStyle("-fx-background-color: lightblue;"); // changes bg color of Scene 1
         icon.setStyle("-fx-font-size: 40px;");
 
-        // “I styled the labels and button so the title is most noticeable and the weather information is easier to read.”
+        // I styled the labels and button so the title is most noticeable and the weather information is easier to read.
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-        icon.setStyle("-fx-font-size: 40px;"); // make icon big
+        icon.setStyle("-fx-font-size: 40px;"); // set size for icon
         tempLabel.setStyle("-fx-font-size: 18px;");
         forecastLabel.setStyle("-fx-font-size: 18px;");
         forecastButton.setStyle("-fx-font-size: 16px;");
 
-        // “I created the first scene from my VBox layout, attached it to the stage, and then displayed it.”
+        // I created the first scene from my VBox layout, attached it to the stage, and then displayed it.
         Scene scene1 = new Scene(root, 700, 700);
 
+        // Scene 2 Implementation starts
         VBox root2 = new VBox();
         root2.setSpacing(15);
         root2.setAlignment(Pos.CENTER);
         root2.setPadding(new Insets(20));
-        root2.setStyle("-fx-background-color: #f0e68c;");
+        root2.setStyle("-fx-background-color: lightyellow;");
 
         Label forecastTitle = new Label("3-Day Forecast");
         forecastTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        // Graphical component for Scene 2
+        // GUI element for Scene 2
         Label calendarIcon = new Label("📅");
         calendarIcon.setStyle("-fx-font-size: 50px;");
 
         root2.getChildren().addAll(forecastTitle, calendarIcon);
 
         // Loop to get the next 6 periods (Day & Night for 3 days)
-        // We start at index 1 because index 0 is "Today"
         for (int i = 1; i <= 6 && i < forecast.size(); i++) {
             Period p = forecast.get(i);
 
-            // Requirement: day/night temp, wind speed, wind direction
+            // Get Temperature, wind speed and wind direction
             String details = String.format("%s: %s°F | Wind: %s %s",
                     p.name, p.temperature, p.windSpeed, p.windDirection);
 
             Label periodLabel = new Label(details);
-            periodLabel.setStyle("-fx-font-size: 16px; -fx-background-color: white; " +
+            periodLabel.setStyle("-fx-font-size: 16px; -fx-background-color: lightgreen; " +
                     "-fx-padding: 5px; -fx-border-color: gray;");
             root2.getChildren().add(periodLabel);
         }
@@ -142,13 +142,15 @@ public class JavaFX extends Application {
         Button backButton = new Button("Back to Today");
         backButton.setStyle("-fx-font-size: 16px;");
 
-        // Add some spacing before the back button
+        // Add margin after VBox
         VBox.setMargin(backButton, new Insets(20, 0, 0, 0));
         root2.getChildren().add(backButton);
 
         Scene scene2 = new Scene(root2, 700, 700);
+        // Button Logic
         forecastButton.setOnAction(e -> primaryStage.setScene(scene2));
         backButton.setOnAction(e -> primaryStage.setScene(scene1));
+
         primaryStage.setScene(scene1);
         primaryStage.show();
 	}
