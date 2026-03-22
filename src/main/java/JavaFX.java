@@ -157,3 +157,4 @@ public class JavaFX extends Application {
 /*Comments: “I used a VBox to vertically arrange UI elements. I used labels for displaying weather data and a button
 for navigation. I added a dynamic icon based on the forecast text using conditional logic.”
 */
+/*Comments: "I implemented the probability of precipitation in scene1"*/
