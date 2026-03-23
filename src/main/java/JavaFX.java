@@ -23,15 +23,29 @@ public class JavaFX extends Application {
             throw new RuntimeException("Forecast did not load");
         }
 
+        // Load hourly weather data
+        ArrayList<HourlyWeather> hourlyData = MyWeatherAPI.getHourlyForecast("LOT", 77, 70);
+        if (hourlyData == null) {
+            throw new RuntimeException("Hourly forecast did not load");
+        }
+
         // Get today's forecast for Scene 1
         Period today = forecast.get(0);
+
+        // Optional debug print
+        for (int i = 0; i < 5 && i < hourlyData.size(); i++) {
+            System.out.println(hourlyData.get(i).timeLabel + " " +
+                    hourlyData.get(i).temperature + "° " +
+                    hourlyData.get(i).precipitation + "% " +
+                    hourlyData.get(i).windSpeed);
+        }
 
         // Buttons for switching between scenes
         Button forecastButton = new Button("View 3-Day Forecast");
         Button backButton = new Button("Back to Today");
 
         // Build Scene 1 using TodayWeatherScene
-        TodayWeatherScene todaySceneBuilder = new TodayWeatherScene(today, forecastButton);
+        TodayWeatherScene todaySceneBuilder = new TodayWeatherScene(today, hourlyData, forecastButton);
         Scene scene1 = todaySceneBuilder.buildScene(900, 700, "lightblue");
 
         // Build Scene 2 using ForecastScene

@@ -6,6 +6,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import weather.Period;
+import javafx.scene.control.ScrollPane;
 
 import java.util.ArrayList;
 
@@ -36,13 +37,13 @@ public class ForecastScene extends WeatherSceneTemplate {
         Label dayTab = new Label("Day & Night");
         dayTab.setStyle("-fx-border-color: transparent transparent #4285F4 transparent; -fx-border-width: 0 0 3 0; -fx-font-size: 14px;");
 
-        Label tempTab = new Label("Temperature");
-        tempTab.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
+        //Label tempTab = new Label("Temperature");
+        //tempTab.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
 
-        Label windTab = new Label("Wind");
-        windTab.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
+        //Label windTab = new Label("Wind");
+        //windTab.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
 
-        HBox tabs = new HBox(25, dayTab, tempTab, windTab);
+        HBox tabs = new HBox(25, dayTab);
         tabs.setAlignment(Pos.CENTER_LEFT);
         tabs.setPadding(new Insets(10, 0, 5, 0));
 
@@ -114,11 +115,20 @@ public class ForecastScene extends WeatherSceneTemplate {
         buttonBox.setPadding(new Insets(25, 0, 0, 0));
 
         // ---------------- FINAL ROOT ----------------
-        root.getChildren().clear();
-        root.getChildren().addAll(headerBox, tabs, line, cardsContainer, buttonBox);
+        VBox content = new VBox(20);
+        content.setAlignment(Pos.TOP_CENTER);
+        content.setPadding(new Insets(30));
+        content.setStyle("-fx-background-color: white; -fx-font-family: Arial;");
 
-        root.setPadding(new Insets(30));
-        root.setAlignment(Pos.TOP_CENTER);
-        root.setStyle("-fx-background-color: white; -fx-font-family: Arial;");
+        content.getChildren().addAll(headerBox, tabs, line, cardsContainer, buttonBox);
+
+        // ScrollPane wrapper
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: white;");
+
+        // Replace root content
+        root.getChildren().clear();
+        root.getChildren().add(scrollPane);
     }
 }
