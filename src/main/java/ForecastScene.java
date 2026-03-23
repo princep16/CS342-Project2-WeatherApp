@@ -37,12 +37,6 @@ public class ForecastScene extends WeatherSceneTemplate {
         Label dayTab = new Label("Day & Night");
         dayTab.setStyle("-fx-border-color: transparent transparent #4285F4 transparent; -fx-border-width: 0 0 3 0; -fx-font-size: 14px;");
 
-        //Label tempTab = new Label("Temperature");
-        //tempTab.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
-
-        //Label windTab = new Label("Wind");
-        //windTab.setStyle("-fx-text-fill: gray; -fx-font-size: 14px;");
-
         HBox tabs = new HBox(25, dayTab);
         tabs.setAlignment(Pos.CENTER_LEFT);
         tabs.setPadding(new Insets(10, 0, 5, 0));

@@ -169,8 +169,12 @@ public class TodayWeatherScene extends WeatherSceneTemplate {
 
         // ---------------- BUTTON ----------------
         forecastButton.setText("View Full 3-Day Forecast");
-        forecastButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-
+        forecastButton.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.1);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-padding: 8 16;"
+        );
         HBox btnBox = new HBox(forecastButton);
         btnBox.setAlignment(Pos.CENTER);
         btnBox.setPadding(new Insets(40, 0, 0, 0));
