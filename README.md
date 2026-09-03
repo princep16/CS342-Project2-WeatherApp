@@ -2,6 +2,22 @@
 
 A JavaFX desktop application that retrieves live weather data from the National Weather Service and presents current, hourly, and three-day forecasts through an interactive interface.
 
+## 📸 Application Preview
+
+<p align="center">
+  <strong>Current and Hourly Weather Dashboard</strong><br>
+  <img src="Screenshots%20Weather%20App/weather-dashboard.png"
+       alt="Current and hourly weather dashboard"
+       width="70%">
+</p>
+
+<p align="center">
+  <strong>Three-Day Forecast</strong><br>
+  <img src="Screenshots%20Weather%20App/three-day-forecast.png"
+       alt="Three-day weather forecast"
+       width="90%">
+</p>
+
 ## ✨ Features
 
 - Live weather data from the National Weather Service API
