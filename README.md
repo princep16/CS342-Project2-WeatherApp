@@ -71,7 +71,7 @@ The application separates API data, presentation logic, and reusable interface c
 
 4. Confirm that the project uses JDK 11 or later.
 
-5. Run `JavaFX.java` from `src/main/java`.
+5. Run `Launcher.java` from `src/main/java`.
 
 No API key is required because the application uses the public National Weather Service API.
 
@@ -79,7 +79,7 @@ No API key is required because the application uses the public National Weather 
 
 ```text
 src/main/java/
-├── JavaFX.java                 # Application entry point and scene navigation
+├── Launcher.java               # Recommended application entry point
 ├── TodayWeatherScene.java      # Current and hourly weather interface
 ├── ForecastScene.java          # Three-day forecast interface
 ├── MyWeatherAPI.java           # Hourly API requests and JSON processing
