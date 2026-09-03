@@ -1,92 +1,96 @@
-# CS 342 Project 2 – Weather App
+# Weather Forecast Application
 
-## 👥 Team Members
+A JavaFX desktop application that retrieves live weather data from the National Weather Service and presents current, hourly, and three-day forecasts through an interactive interface.
+
+## ✨ Features
+
+- Live weather data from the National Weather Service API
+- Current temperature, forecast, precipitation, and wind conditions
+- Hourly temperature, precipitation, and wind views
+- Fahrenheit and Celsius temperature switching
+- Three-day day-and-night forecast
+- Dynamic weather icons and backgrounds based on current conditions
+- Clothing suggestions based on temperature, wind, and precipitation
+- Navigation between current-weather and extended-forecast scenes
+- Graceful handling of unavailable or incomplete API data
+
+## 🛠️ Technologies
+
+- Java 11
+- JavaFX
+- National Weather Service REST API
+- Jackson Databind
+- Maven
+- Git and GitHub
+
+## Architecture
+
+The application separates API data, presentation logic, and reusable interface components:
+
+- **Adapter Pattern:** `WeatherAdapter` converts raw API objects into UI-ready weather information.
+- **Template Method Pattern:** `WeatherSceneTemplate` provides shared scene construction while allowing each weather view to define its own content.
+- **Data Models:** Dedicated model classes map forecast and hourly JSON responses into Java objects.
+- **Scene-Based UI:** Separate JavaFX scenes display current conditions and extended forecasts.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Java Development Kit 11 or later
+- Maven
+- IntelliJ IDEA or another Java IDE with Maven support
+- Internet connection for live weather data
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/princep16/CS342-Project2-WeatherApp.git
+   ```
+
+2. Open the project in IntelliJ IDEA.
+
+3. Allow Maven to load the dependencies from `pom.xml`.
+
+4. Confirm that the project uses JDK 11 or later.
+
+5. Run `JavaFX.java` from `src/main/java`.
+
+No API key is required because the application uses the public National Weather Service API.
+
+## Project Structure
+
+```text
+src/main/java/
+├── JavaFX.java                 # Application entry point and scene navigation
+├── TodayWeatherScene.java      # Current and hourly weather interface
+├── ForecastScene.java          # Three-day forecast interface
+├── MyWeatherAPI.java           # Hourly API requests and JSON processing
+├── WeatherAdapter.java         # Converts API data into UI-ready values
+├── WeatherSceneTemplate.java   # Shared JavaFX scene structure
+├── HourlyWeather.java          # Processed hourly weather model
+└── weather/                    # Forecast API models and provided API client
+```
+
+## 👥 Team
+
 - Prince Patel
 - Shlok Zala
 
----
+### Prince Patel’s Contributions
 
-## 📌 Project Overview
-This project is a JavaFX-based Weather App that uses the National Weather Service API (provided in the starter code) to display weather data for Chicago.
+- Integrated the National Weather Service hourly API
+- Parsed and transformed JSON forecast data with Jackson
+- Designed the JavaFX frontend and overall user experience
+- Implemented hourly weather views, dynamic visuals, and forecast navigation
+- Coordinated the project workflow through Git and GitHub
+- Assisted with integration testing and debugging
 
-The app will contain:
-- Scene 1: Today’s Weather
-- Scene 2: 3-Day Forecast
-- Scene switching between the two
+## Current Scope
 
----
+The application currently displays weather for Chicago using the National Weather Service grid location configured in the source code. Support for user-selected locations could be added in a future version.
 
-## ✅ Completed Features (Scene 1)
+## Academic Context
 
-### 🔹 1. Weather Data Integration
-- Used `WeatherAPI.getForecast("LOT", 77, 70)` to retrieve forecast data
-- Stored results in an `ArrayList<Period>`
-- Extracted today's weather using:
-  ```java
-  Period today = forecast.get(0);
-
-2. Scene 1 UI Layout
-
-Used a VBox layout to arrange elements vertically
-Elements included:
-- Title label ("Today's Weather")
-- Weather icon (dynamic)
-- Temperature label
-- Forecast description label
-- Button ("View 3-Day Forecast")
-
-3. Dynamic Weather Icon (Extra Feature)
-
-- Implemented logic to display different icons based on forecast text
-- Converted forecast string to lowercase for easier comparison:
-String forecastText = today.shortForecast.toLowerCase();
-
-Used if-else conditions to check keywords like:
-
-sun / clear → ☼
-
-cloud → ☁
-
-rain / shower → ☂
-
-snow → ❄
-
-fog / mist → ≈
-
-storm / thunder → ⚡
-
-Displays a default icon if no match is found
-
-🚧**Work Remaining**
-
-🔹 Scene 2 (3-Day Forecast)
-
-Display 3 forecast periods
-
-Include:
-
-Day name
-
-Temperature
-
-Forecast description
-
-Wind speed and direction
-
-Use VBox blocks for each day
-
-🔹 Scene Switching
-
-Implement button actions:
-
-Scene 1 → Scene 2
-
-Scene 2 → Scene 1
-
-🔹 Design Patterns (HW Requirement)
-
-Plan to implement:
-
-Adapter Pattern (for cleaner data access)
-
-Template Method Pattern (for reusable UI structure)
+Developed as a team project for CS 342: Software Design at the University of Illinois Chicago.
